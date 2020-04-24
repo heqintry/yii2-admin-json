@@ -1,0 +1,12 @@
+{
+    "name": "heqintry/yii2-admin-json",
+    "type": "yii2-extension",
+    "require": {
+        "yiisoft/yii2": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "hqt\\admin\\": ""
+        }
+    }
+}
