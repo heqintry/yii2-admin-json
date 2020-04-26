@@ -4,7 +4,6 @@ namespace hqt\admin\components;
 
 use Yii;
 use yii\caching\Cache;
-use yii\db\Connection;
 use yii\di\Instance;
 use yii\helpers\ArrayHelper;
 use yii\rbac\ManagerInterface;
@@ -17,8 +16,6 @@ use yii\rbac\ManagerInterface;
  * return [
  *
  *     'mdm.admin.configs' => [
- *         'db' => 'customDb',
- *         'menuTable' => '{{%admin_menu}}',
  *         'cache' => [
  *             'class' => 'yii\caching\DbCache',
  *             'db' => ['dsn' => 'sqlite:@runtime/admin-cache.db'],
@@ -31,8 +28,10 @@ use yii\rbac\ManagerInterface;
  *
  * ```
  * Yii::$container->set('hqt\admin\components\Configs',[
- *     'db' => 'customDb',
- *     'menuTable' => 'admin_menu',
+ *     'cache' => [
+ *         'class' => 'yii\caching\DbCache',
+ *         'db' => ['dsn' => 'sqlite:@runtime/admin-cache.db'],
+ *     ],
  * ]);
  * ```
  *
@@ -50,16 +49,6 @@ class Configs extends \hqt\admin\BaseObject
     public $authManager = 'authManager';
 
     /**
-     * @var Connection Database connection.
-     */
-    public $db = 'db';
-
-    /**
-     * @var Connection Database connection.
-     */
-    public $userDb = 'db';
-
-    /**
      * @var Cache Cache component.
      */
     public $cache = 'cache';
@@ -68,21 +57,6 @@ class Configs extends \hqt\admin\BaseObject
      * @var integer Cache duration. Default to a hour.
      */
     public $cacheDuration = 3600;
-
-    /**
-     * @var string Menu table name.
-     */
-    public $menuTable = '{{%menu}}';
-
-    /**
-     * @var string Menu table name.
-     */
-    public $userTable = '{{%user}}';
-
-    /**
-     * @var integer Default status user signup. 10 mean active.
-     */
-    public $defaultUserStatus = 10;
 
     /**
      * @var boolean If true then AccessControl only check if route are registered.
@@ -125,8 +99,6 @@ class Configs extends \hqt\admin\BaseObject
      */
     private static $_instance;
     private static $_classes = [
-        'db' => 'yii\db\Connection',
-        'userDb' => 'yii\db\Connection',
         'cache' => 'yii\caching\Cache',
         'authManager' => 'yii\rbac\ManagerInterface',
     ];
@@ -179,22 +151,6 @@ class Configs extends \hqt\admin\BaseObject
     }
 
     /**
-     * @return Connection
-     */
-    public static function db()
-    {
-        return static::instance()->db;
-    }
-
-    /**
-     * @return Connection
-     */
-    public static function userDb()
-    {
-        return static::instance()->userDb;
-    }
-
-    /**
      * @return Cache
      */
     public static function cache()
@@ -215,30 +171,6 @@ class Configs extends \hqt\admin\BaseObject
     public static function cacheDuration()
     {
         return static::instance()->cacheDuration;
-    }
-
-    /**
-     * @return string
-     */
-    public static function menuTable()
-    {
-        return static::instance()->menuTable;
-    }
-
-    /**
-     * @return string
-     */
-    public static function userTable()
-    {
-        return static::instance()->userTable;
-    }
-
-    /**
-     * @return string
-     */
-    public static function defaultUserStatus()
-    {
-        return static::instance()->defaultUserStatus;
     }
 
     /**
